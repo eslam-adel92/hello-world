@@ -26,12 +26,12 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       # - checkout:
+      - attach_workspace:
+          at: /tmp/
       - run: 
-          name: "Save text into file."
+          name: "Cat txt from file."
           command: |
             cat /tmp/output.txt
-      - attach_workspace:
-          at: /tmp/output.txt
 
 # Orchestrate or schedule a set of jobs
 workflows:
