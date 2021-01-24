@@ -17,7 +17,7 @@ jobs:
           command: |
             echo "hello world" > output.txt
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: /tmp/
           paths:
             - output.txt
 
@@ -29,9 +29,9 @@ jobs:
       - run: 
           name: "Save text into file."
           command: |
-            cat /tmp/workspace/output.txt
+            cat /tmp/output.txt
       - attach_workspace:
-          at: /tmp/workspace
+          at: /tmp/
 
 # Orchestrate or schedule a set of jobs
 workflows:
