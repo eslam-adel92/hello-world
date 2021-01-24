@@ -7,29 +7,31 @@ orbs:
 
 # Here the start of the exercise from the course:
 jobs:
-  print_hello:
+  save_hello_world_output:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:2020.01
     steps:
-      - run: echo hello
-
-  
-  print_world:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo world
-  
-  print_env_var:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
+      - checkout:
       - run: 
-          name: "echo an env var that is part of our project"
+          name: "Save text into file."
           command: |
-            echo $DEVOPS_NAME
+            echo "hello world" > output.txt
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - output.txt
 
-
+  print_output_file:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout:
+      - run: 
+          name: "Save text into file."
+          command: |
+            cat /tmp/workspace/output.txt
+      - attach_workspace:
+          at: /tmp/workspace
 
 # Orchestrate or schedule a set of jobs
 workflows:
@@ -37,9 +39,7 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - welcome/run
-      - print_hello
-      - print_world:
+      - save_hello_world_output
+      - print_output_file:
           requires:
-            - print_hello
-      - print_env_var
+            - save_hello_world_output
